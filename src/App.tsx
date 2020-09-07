@@ -1,34 +1,73 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import TodoList from "./TodoList";
+import TodoList from './TodoList';
+import {setInterval} from 'timers';
+import {v1} from 'uuid';
 
 export type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
 
-function App() {
-    const tasks1: Array<TaskType> = [
-        {id: 1, title: "HTML&CSS", isDone: true},
-        {id: 2, title: "JS", isDone: true},
-        {id: 3, title: "React", isDone: false}
-    ]
+export type filterValuesType = 'all' | 'active' | 'completed';
 
-    const tasks2: Array<TaskType> = [
-        {id: 1, title: "Hello world", isDone: true},
-        {id: 2, title: "Hey", isDone: false},
-        {id: 3, title: "Yo", isDone: false}
-    ]
+
+function App() {
+    //console.log(v1()) !!!!!!!!!!!!!!!!!
+
+    let [tasks, setTasks] = useState<Array<TaskType>>([
+        {id: v1(), title: 'HTML&CSS', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'GraphQL', isDone: false},
+        {id: v1(), title: 'Rest API', isDone: true},
+    ])
+
+
+    let [filter, setFilter] = useState<filterValuesType>('all');
+
+    const addTask = (title: string) => {
+        let newTask: TaskType = {id: v1(), title: title, isDone: false};
+        setTasks([newTask, ...tasks]);
+    }
+
+    const removeTask = (taskId: string) => {
+        setTasks(tasks.filter(task => task.id !== taskId));
+    }
+
+    const changeFilter = (value: filterValuesType) => {
+        setFilter(value);
+    }
+
+    let tasksForToDoList = tasks;
+    if (filter === 'active') {
+        tasksForToDoList = tasks.filter(task => !task.isDone)
+    }
+
+    if (filter === 'completed') {
+        tasksForToDoList = tasks.filter(task => task.isDone)
+    }
+
+    let [time, setTime] = useState<string>(new Date().toLocaleTimeString())
+
+    let stopTime = setInterval(() => {
+        setTime(new Date().toLocaleTimeString())
+    }, 1000);
 
     return (
-        <div className="App">
-            <TodoList title="What to learn" tasks={tasks1}/>
-            <TodoList title="Songs" tasks={tasks2}/>
+        <div className='App'>
+            <TodoList title='What to learn' tasks={tasksForToDoList}
+                      removeTask={removeTask} changeFilter={changeFilter}
+                      addTask={addTask}/>
+            <div className='time'>
+                {time}
+                <button onClick={() => clearInterval(stopTime)}>
+                    Stop Time
+                </button>
+            </div>
         </div>
     );
 }
 
 export default App;
-
-
