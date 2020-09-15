@@ -14,8 +14,6 @@ export type filterValuesType = 'all' | 'active' | 'completed';
 
 
 function App() {
-    //console.log(v1()) !!!!!!!!!!!!!!!!!
-
     let [tasks, setTasks] = useState<Array<TaskType>>([
         {id: v1(), title: 'HTML&CSS', isDone: true},
         {id: v1(), title: 'JS', isDone: true},
@@ -40,6 +38,14 @@ function App() {
         setFilter(value);
     }
 
+    const changeStatus = (taskId: string, isDone: boolean) => {
+        let task = tasks.find(t => t.id === taskId);
+        if (task) {
+            task.isDone = isDone;
+            setTasks([...tasks]);
+        }
+    }
+
     let tasksForToDoList = tasks;
     if (filter === 'active') {
         tasksForToDoList = tasks.filter(task => !task.isDone)
@@ -49,23 +55,24 @@ function App() {
         tasksForToDoList = tasks.filter(task => task.isDone)
     }
 
-    let [time, setTime] = useState<string>(new Date().toLocaleTimeString())
+    /*let [time, setTime] = useState<string>(new Date().toLocaleTimeString())
 
     let stopTime = setInterval(() => {
         setTime(new Date().toLocaleTimeString())
-    }, 1000);
+    }, 1000);*/
 
     return (
         <div className='App'>
             <TodoList title='What to learn' tasks={tasksForToDoList}
                       removeTask={removeTask} changeFilter={changeFilter}
-                      addTask={addTask}/>
-            <div className='time'>
+                      addTask={addTask} changeStatus={changeStatus}
+                      filter={filter}/>
+            {/*<div className='time'>
                 {time}
                 <button onClick={() => clearInterval(stopTime)}>
                     Stop Time
                 </button>
-            </div>
+            </div>*/}
         </div>
     );
 }
