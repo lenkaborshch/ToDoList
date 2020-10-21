@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
-import {Button, IconButton, TextField} from '@material-ui/core';
-import {AddBox, TextFields} from '@material-ui/icons';
+import {Button, IconButton, TextField} from '@material-ui/core'
+import {AddBox, TextFields} from '@material-ui/icons'
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -8,8 +8,8 @@ type AddItemFormPropsType = {
 
 export function AddItemForm(props: AddItemFormPropsType) {
 
-    let [title, setTitle] = useState<string>('');
-    let [error, setError] = useState<string | null>(null);
+    let [title, setTitle] = useState<string>('')
+    let [error, setError] = useState<string | null>(null)
 
     const onAddTaskClick = () => {
         if (title.trim()) {
@@ -23,7 +23,7 @@ export function AddItemForm(props: AddItemFormPropsType) {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setError(null)
         setTitle(e.currentTarget.value)
-        /*console.log(title);*/
+        /*console.log(title) */
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {

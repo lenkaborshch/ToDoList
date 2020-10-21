@@ -1,17 +1,17 @@
 import React, {ChangeEvent} from 'react'
-import {filterValuesType, TaskType} from './App'
+import {FilterValuesType, TaskType} from './App'
 import {AddItemForm} from './AddItemForm'
 import {EditableSpan} from './EditableSpan'
-import {Button, IconButton, Checkbox} from '@material-ui/core';
-import {Delete} from '@material-ui/icons';
+import {Button, IconButton, Checkbox} from '@material-ui/core'
+import {Delete} from '@material-ui/icons'
 
 type TodoListPropsType = {
     id: string
     title: string
-    filter: filterValuesType
+    filter: FilterValuesType
     tasks: Array<TaskType>
     removeTask: (taskId: string, todoListId: string) => void
-    changeFilter: (value: filterValuesType, todoListId: string) => void
+    changeFilter: (value: FilterValuesType, todoListId: string) => void
     addTask: (title: string, todoListId: string) => void
     changeStatus: (taskId: string, isDone: boolean, todoListId: string) => void
     removeTodoList: (todoListId: string) => void
@@ -20,7 +20,6 @@ type TodoListPropsType = {
 }
 
 export function TodoList(props: TodoListPropsType) {
-//нельзя редактировать уже выполненные
 
     const tasks = props.tasks.map(task => {
         const removeTask = () => props.removeTask(task.id, props.id)
