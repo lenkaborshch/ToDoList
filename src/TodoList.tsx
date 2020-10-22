@@ -4,6 +4,8 @@ import {AddItemForm} from './AddItemForm'
 import {EditableSpan} from './EditableSpan'
 import {Button, IconButton, Checkbox} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
+import {AppRootStoreType} from "./state/store";
+import {useSelector} from "react-redux";
 
 type TodoListPropsType = {
     id: string
@@ -20,8 +22,9 @@ type TodoListPropsType = {
 }
 
 export function TodoList(props: TodoListPropsType) {
+    let tasksTodoLists = useSelector<AppRootStoreType, Array<TaskType>>(state => state.tasks[props.id])
 
-    const tasks = props.tasks.map(task => {
+    const tasks = tasksTodoLists.map(task => {
         const removeTask = () => props.removeTask(task.id, props.id)
         const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
             props.changeStatus(task.id, e.currentTarget.checked, props.id)
@@ -29,9 +32,10 @@ export function TodoList(props: TodoListPropsType) {
         const changeTaskTitle = (value: string) => {
             props.changeTaskTitle(task.id, value, props.id)
         }
+
         return (
             <div key={task.id} className={task.isDone ? 'is-done' : ''}>
-                <Checkbox color='primary' checked={task.isDone} onChange={changeTaskStatus} />
+                <Checkbox color='primary' checked={task.isDone} onChange={changeTaskStatus}/>
                 <EditableSpan value={task.title} changeValue={changeTaskTitle}/>
                 <IconButton onClick={removeTask}>
                     <Delete/>

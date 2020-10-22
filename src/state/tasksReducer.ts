@@ -1,5 +1,6 @@
 import {TasksStateType, TaskType} from "../App"
 import {AddTodolistActionType, RemoveTodolistActionType} from "./todolistsReducer"
+import {v1} from "uuid";
 
 type RemoveTaskActionType = {
     type: 'REMOVE_TASK'
@@ -28,7 +29,8 @@ type ChangeTaskTitleActionType = {
 }
 
 type ActionsType = RemoveTaskActionType | AddTaskActionType |
-    ChangeTaskStatusActionType | ChangeTaskTitleActionType | AddTodolistActionType | RemoveTodolistActionType
+    ChangeTaskStatusActionType | ChangeTaskTitleActionType |
+    AddTodolistActionType | RemoveTodolistActionType
 
 export const removeTaskAC = (taskId: string, todoListId: string): RemoveTaskActionType => {
     return {
@@ -64,8 +66,22 @@ export const changeTaskTitleAC = (taskId: string, title: string, todoListId: str
     }
 }
 
+const initialState: TasksStateType = {
+    ['todoListId1']: [
+        {id: v1(), title: 'HTML&CSS', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'GraphQL', isDone: false},
+        {id: v1(), title: 'Rest API', isDone: true}
+    ],
+    ['todoListId2']: [
+        {id: v1(), title: 'Milk', isDone: true},
+        {id: v1(), title: 'Bananas', isDone: true},
+        {id: v1(), title: 'Oranges', isDone: false}
+    ]
+}
 
-export const tasksReducer = (state: TasksStateType, action: ActionsType) => {
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE_TASK': {
             let copyState = {...state}
@@ -74,7 +90,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType) => {
         }
         case 'ADD_TASK': {
             let newTask: TaskType = {id: '0', title: action.title, isDone: false}
-            return {...state, [action.todoListId]: [ newTask, ...state[action.todoListId]]}
+            return {...state, [action.todoListId]: [newTask, ...state[action.todoListId]]}
         }
         case 'CHANGE_TASK_STATUS': {
             let stateCopy = {...state}
@@ -101,6 +117,6 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType) => {
             return stateCopy
         }
         default:
-            throw new Error('I don`t understand this action')
+            return state
     }
 }

@@ -27,21 +27,33 @@ type ChangeTitleTodolistActionType = {
 type ActionsType = RemoveTodolistActionType | AddTodolistActionType |
     ChangeFilterTodolistActionType | ChangeTitleTodolistActionType
 
-export const removeTodolistAC = (id: string): RemoveTodolistActionType => ({type: 'REMOVE_TODOLIST', id: id})
-export const addTodolistAC = (title: string): AddTodolistActionType => ({type: 'ADD_TODOLIST', title: title, todolistId: v1()})
-export const changeFilterTodolistAC = (id: string, filter: FilterValuesType): ChangeFilterTodolistActionType => ({
+export const removeTodolistAC = (todoListId: string): RemoveTodolistActionType => ({
+    type: 'REMOVE_TODOLIST',
+    id: todoListId
+})
+export const addTodolistAC = (title: string): AddTodolistActionType => ({
+    type: 'ADD_TODOLIST',
+    title: title,
+    todolistId: v1()
+})
+export const changeFilterTodolistAC = (filter: FilterValuesType, todoListId: string): ChangeFilterTodolistActionType => ({
     type: 'CHANGE_TODOLIST_FILTER',
-    id: id,
+    id: todoListId,
     filter: filter
 })
 
-export const changeTitleTodolistAC = (id: string, title: string): ChangeTitleTodolistActionType => ({
+export const changeTitleTodolistAC = (title: string, todoListId: string): ChangeTitleTodolistActionType => ({
     type: 'CHANGE_TODOLIST_TITLE',
-    id: id,
+    id: todoListId,
     title: title
 })
 
-export const todolistsReducer = (state: Array<TodoListType>, action: ActionsType): Array<TodoListType> => {
+const initialState: Array<TodoListType> = [
+    {id: 'todoListId1', title: 'What to learn', filter: 'all'},
+    {id: 'todoListId2', title: 'What to buy', filter: 'all'}
+]
+
+export const todolistsReducer = (state: Array<TodoListType> = initialState, action: ActionsType): Array<TodoListType> => {
     switch (action.type) {
         case 'REMOVE_TODOLIST':
             return state.filter(tl => tl.id !== action.id)
@@ -55,11 +67,12 @@ export const todolistsReducer = (state: Array<TodoListType>, action: ActionsType
             })
 
         case 'CHANGE_TODOLIST_TITLE':
-            const todoList = state.find(tl => tl.id === action.id)
+            let stateCopy = [...state]
+            const todoList = stateCopy.find(tl => tl.id === action.id)
             if (todoList) todoList.title = action.title
-            return [...state]
+            return stateCopy
 
         default:
-            throw new Error("I don't understand this type")
+            return state
     }
 }
