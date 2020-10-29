@@ -1,36 +1,37 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
-import {Button, IconButton, TextField} from '@material-ui/core'
-import {AddBox, TextFields} from '@material-ui/icons'
+import React, {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react'
+import {IconButton, TextField} from '@material-ui/core'
+import {AddBox} from '@material-ui/icons'
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-export function AddItemForm(props: AddItemFormPropsType) {
+export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
 
     let [title, setTitle] = useState<string>('')
     let [error, setError] = useState<string | null>(null)
 
-    const onAddTaskClick = () => {
+    const onAddTaskClick = useCallback (() => {
         if (title.trim()) {
             props.addItem(title.trim())
             setTitle('')
         } else {
             setError('Title is required!')
         }
-    }
+    }, [props.addItem, title])
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setError(null)
+    const onChangeHandler = useCallback ((e: ChangeEvent<HTMLInputElement>) => {
+        if(error) {
+            setError(null)
+        }
         setTitle(e.currentTarget.value)
-        /*console.log(title) */
-    }
+    }, [error])
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const onKeyPressHandler = useCallback( (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             onAddTaskClick()
         }
-    }
+    }, [title])
 
     return (
         <div>
@@ -46,4 +47,4 @@ export function AddItemForm(props: AddItemFormPropsType) {
             </IconButton>
         </div>
     )
-}
+})

@@ -120,28 +120,17 @@ function AppWithReducers() {
                 </Grid>
                 <Grid container spacing={3}>
                     {todoLists.map(tl => {
-                        let tasksForToDoList = tasks[tl.id]
-
-                        if (tl.filter === 'active') {
-                            tasksForToDoList = tasks[tl.id].filter(task => !task.isDone)
-                        }
-
-                        if (tl.filter === 'completed') {
-                            tasksForToDoList = tasks[tl.id].filter(task => task.isDone)
-                        }
-
                         return (
                             <Grid item key={tl.id}>
                                 <Paper style={{padding: '10px'}}>
                                     <TodoList
-                                        id={tl.id}
+                                        todolistId={tl.id}
                                         title={tl.title}
                                         filter={tl.filter}
-                                        tasks={tasksForToDoList}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
-                                        changeStatus={changeTaskStatus}
+                                        changeTaskStatus={changeTaskStatus}
                                         removeTodoList={removeTodoList}
                                         changeTaskTitle={changeTaskTitle}
                                         changeTodoListTitle={changeTitleTodoList}
