@@ -1,6 +1,5 @@
 import React, {useReducer} from 'react'
 import './App.css'
-import {TodoList} from './TodoList'
 import {v1} from 'uuid'
 import {AddItemForm} from './AddItemForm'
 import {AppBar, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core'
@@ -14,6 +13,7 @@ import {
     todolistsReducer
 } from "./state/todolistsReducer";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasksReducer";
+import { TodoList } from './TodoList'
 
 export type TaskType = {
     id: string
